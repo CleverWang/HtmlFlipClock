@@ -1,0 +1,60 @@
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="stylesheet" href="./css/flipclock.css">
+	<link rel="stylesheet" href="./css/style.css">
+
+	<script src="./js/jquery.min.js"></script>
+	<script src="./js/flipclock.js"></script>
+</head>
+
+<body>
+	<div id="box">
+		<div id="content">
+			<div class="clock" id="flipclock"></div>
+			<h1 class="date" id='showDate'></h1>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		// mobile
+		if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+			document.getElementById('flipclock').setAttribute("style", "zoom:1.5;");
+			document.getElementById('showDate').setAttribute("style", "zoom:1.5;");
+		}
+
+		var clock;
+
+		function Update() {
+			let d = new Date();
+			console.log(`Update to ${d}`);
+			clock.setTime(d);
+			let dateString = d.getFullYear() + "年" + (d.getMonth() + 1) + "月" + d.getDate() + "日" + ' 星期' + '日一二三四五六'.charAt(d.getDay());
+			document.getElementById('showDate').innerHTML = dateString;
+		}
+
+		$(document).ready(function () {
+			clock = $('.clock').FlipClock({
+				clockFace: 'TwelveHourClock',
+				showSeconds: false,
+				callbacks: {
+					interval: function () {
+						// console.log("Interval is called");
+						if (clock !== undefined && clock !== null) {
+							let clockTime = clock.getTime().time;
+							if (Date.now() - clockTime > 30000) {
+								Update();
+							}
+						}
+					}
+				}
+			});
+			Update();
+		});
+	</script>
+</body>
+
+</html>
